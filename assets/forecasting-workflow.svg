@@ -22,7 +22,7 @@
 <rect width="224" height="222" rx="18" fill="#f8fafc"/>
 <rect x="18" y="18" width="46" height="34" rx="10" fill="#dcfce7"/>
 <text x="41" y="41" fill="#166534" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">02</text>
-<text x="18" y="83" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">PREPARE & EXPLORE</text>
+<text x="18" y="83" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">PREPARE &amp; EXPLORE</text>
 <text x="18" y="124" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="15">Validate and clean</text>
 <text x="18" y="150" fill="#64748b" font-family="Inter,Arial,sans-serif" font-size="14">Daily product-date panel</text>
 <rect x="18" y="180" width="188" height="5" rx="2.5" fill="#dbe4ee"/>
@@ -31,14 +31,14 @@
 <rect x="18" y="18" width="46" height="34" rx="10" fill="#dcfce7"/>
 <text x="41" y="41" fill="#166534" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">03</text>
 <text x="18" y="83" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">FEATURE ENGINEERING</text>
-<text x="18" y="124" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="15">Lag & rolling features</text>
+<text x="18" y="124" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="15">Lag &amp; rolling features</text>
 <text x="18" y="150" fill="#64748b" font-family="Inter,Arial,sans-serif" font-size="14">Recency · Calendar signals</text>
 <rect x="18" y="180" width="188" height="5" rx="2.5" fill="#dbe4ee"/>
 </g><path d="M813 299 h20 l-7 -7 m7 7 l-7 7" fill="none" stroke="#67e8f9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(844,188)" filter="url(#shadow)">
 <rect width="224" height="222" rx="18" fill="#f8fafc"/>
 <rect x="18" y="18" width="46" height="34" rx="10" fill="#dcfce7"/>
 <text x="41" y="41" fill="#166534" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">04</text>
-<text x="18" y="83" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">MODEL & EVALUATE</text>
+<text x="18" y="83" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800">MODEL &amp; EVALUATE</text>
 <text x="18" y="124" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="15">XGBoost / CatBoost</text>
 <text x="18" y="150" fill="#64748b" font-family="Inter,Arial,sans-serif" font-size="14">Chronological holdout</text>
 <rect x="18" y="180" width="188" height="5" rx="2.5" fill="#dbe4ee"/>

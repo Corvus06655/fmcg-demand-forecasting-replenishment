@@ -1,14 +1,28 @@
-# Raw/private data and generated outputs
-historical_data.csv
+# Raw, private, and exported data (review any proposed sample explicitly)
 *.csv
-recommended_reorder_quantity.csv
+*.parquet
+*.xlsx
+*.xls
+*.jsonl
+/data/raw/
+/data/private/
 
-# Python
+# Python environments, caches, and generated models
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+.pytest_cache/
+*.joblib
+*.pkl
+*.pickle
+*.model
+catboost_info/
+
+# Local credentials and environment configuration
 .env
+.env.*
+!.env.example
 
 # Jupyter
 .ipynb_checkpoints/
