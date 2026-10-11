@@ -1,17 +1,53 @@
-# Inventory Demand Forecasting & Reorder Optimization
+# FMCG Demand Forecasting & Inventory Replenishment
 
-A Python time-series forecasting project that compares demand-prediction approaches and explores how short-term forecasts can inform preliminary inventory replenishment decisions.
+> A time-aware machine-learning workflow for forecasting product demand over the next seven days and generating preliminary replenishment recommendations from historical sales patterns.
 
-## Project Overview
+![Python](https://img.shields.io/badge/Python-Data%20Science-3776AB?logo=python&logoColor=white)
+![Models](https://img.shields.io/badge/ML-XGBoost%20%7C%20CatBoost-2563EB)
+![Status](https://img.shields.io/badge/Project-Research%20Prototype-0F766E)
 
-The notebook analyzes daily product sales, prepares time-based features, compares a moving-average baseline with machine-learning models, and calculates an initial reorder estimate from predicted 7-day demand and safety stock.
+## Project at a glance
 
-**Important:** This is an analytical prototype, not a production-ready inventory planning system.
+This project explores how historical FMCG sales can support short-term product-demand planning. The workflow covers data quality checks, exploratory analysis, product-level time-series feature engineering, chronological model evaluation, and preliminary reorder recommendations.
 
-## Repository Structure
+- **Forecast target:** total units sold over the following 7 days.
+- **Granularity:** product and date, with category-level context.
+- **Feature engineering:** lagged sales, rolling statistics, recency, historical sales gaps, price, promotions, and calendar features.
+- **Model strategy:** a global XGBoost model plus category-level CatBoost approaches and fallback logic for sparse or low-variation categories.
+- **Evaluation:** MAE, RMSE, and R² on a chronological holdout; model results should be regenerated on the authorized dataset before quoting them.
+- **Decision support:** forecasted demand is combined with a preliminary safety-stock estimate to produce a reorder suggestion.
+
+> **Data note:** Real historical sales data was used during development, but the raw dataset is not included in this public repository. The data was available in an internship context and may be subject to company restrictions. Company identifiers, internal records, and business-specific outputs should only be published with explicit approval.
+
+## Visual overview
+
+### Forecasting workflow
+
+![Demand forecasting workflow](assets/forecasting-workflow.svg)
+
+### Replenishment dashboard concept
+
+![Illustrative replenishment dashboard mockup](assets/replenishment-dashboard-mockup.svg)
+
+*The dashboard image is a documentation mockup, not a screenshot of a deployed application. It contains no company data or real prediction values.*
+
+## Methodology
+
+1. **Data validation and EDA** — inspect schema, missing values, duplicates, sales distributions, outliers, category patterns, and daily/monthly trends.
+2. **Daily product panel** — aggregate sales by product and date, then represent missing product-date combinations explicitly.
+3. **Time-series feature engineering** — create lag features (1, 7, 14, 28, 56, and 365 days), rolling means/medians/sums, sales variability, recent-sales indicators, recency, price, promotion, and calendar features.
+4. **Forecast target** — calculate future seven-day sales for each product-date observation.
+5. **Time-aware validation** — split chronologically and leave a seven-day gap around the split to reduce overlap between training labels and the test period.
+6. **Model routing** — use a global XGBoost model for sparse categories; evaluate category-specific CatBoost, log-target CatBoost, and simple fallback strategies where applicable.
+7. **Evaluation and replenishment** — compare predictions with held-out demand using MAE, RMSE, and R², then create a preliminary reorder recommendation.
+
+## Repository structure
 
 ```text
-inventory-demand-forecasting/
+fmcg-demand-forecasting-replenishment/
+├── assets/
+│   ├── forecasting-workflow.svg
+│   └── replenishment-dashboard-mockup.svg
 ├── notebooks/
 │   └── demand_forecasting.ipynb
 ├── .gitignore
@@ -19,113 +55,78 @@ inventory-demand-forecasting/
 └── README.md
 ```
 
-## Workflow
+## Run locally
 
-1. Load and validate the source sales data.
-2. Clean fields and prepare date-based features.
-3. Explore sales distributions and product/category patterns.
-4. Build a moving-average baseline.
-5. Train and compare Linear Regression, Random Forest, and XGBoost.
-6. Evaluate model predictions with MAE, RMSE, and R².
-7. Generate a preliminary reorder-quantity estimate.
+### 1. Clone the repository
 
-## Recorded Model Results
+```bash
+git clone https://github.com/Corvus06655/inventory-demand-forecasting.git
+cd inventory-demand-forecasting
+```
 
-The following metrics are recorded in the project notebook:
+### 2. Create a virtual environment
 
-| Model | MAE | RMSE | R² |
-|---|---:|---:|---:|
-| Moving-average baseline | 18.297 | 152.535 | 0.230 |
-| Linear Regression | 17.141 | 134.033 | 0.405 |
-| Random Forest | 17.401 | 141.534 | 0.337 |
-| XGBoost | 17.572 | 138.490 | 0.365 |
+**Windows**
+```bash
+python -m venv .venv
+.venv\\Scripts\\activate
+```
 
-Among these global comparisons, Linear Regression has the lowest MAE and RMSE and the highest R². Performance varies across categories; the same accuracy should not be assumed for every product. Re-run the notebook on the authorized dataset to reproduce the results.
+**macOS/Linux**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-## Dataset
+### 3. Install dependencies
 
-The notebook expects a source file named `historical_data.csv` in the repository root. **That file is intentionally not included** because the source data may be private or subject to company restrictions. Only add or publish it if you have explicit permission.
+```bash
+pip install -r requirements.txt
+```
 
-Expected columns:
+### 4. Add the authorized dataset
 
-| Column | Description |
+Place your permitted `historical_data.csv` file in the repository root. The notebook expects these columns:
+
+| Column | Meaning |
 |---|---|
 | `product_id` | Product identifier |
 | `category` | Product category |
 | `hcode` | Product/commodity code |
 | `sold` | Units sold |
 | `date` | Sales date |
-| `is_promotion` | Promotion indicator |
 | `price` | Product price |
+| `is_promotion` | Promotion indicator |
 
-## Setup and Run
+The dataset is deliberately not committed. Do not copy company data into a public repository unless your supervisor or data owner has explicitly authorized it.
 
-Requires Python 3.10+ recommended.
+### 5. Run the notebook
 
-1. Clone the repository:
+```bash
+jupyter lab
+```
 
-   ```bash
-   git clone https://github.com/Corvus06655/inventory-demand-forecasting.git
-   cd inventory-demand-forecasting
-   ```
+Open `notebooks/demand_forecasting.ipynb` and run cells in order. Model metrics and reorder recommendations are generated by the notebook; regenerate them on the approved dataset rather than relying on stale or copied outputs.
 
-2. Create and activate a virtual environment (optional but recommended):
+## Important limitations
 
-   **Windows**
-   ```bash
-   python -m venv .venv
-   .venv\\Scripts\\activate
-   ```
+- This is an analytical prototype, not a production inventory system.
+- Current on-hand stock and inventory already on order are not available as model inputs, so a reorder recommendation is not the same as a verified purchase quantity.
+- The notebook's historical sales-gap feature is a proxy derived from sales events; it is **not** a verified supplier delivery lead time.
+- A robust operational policy would also need supplier lead times, service-level targets, minimum order quantities, pack sizes, shelf life, and stockout/censored-demand handling.
+- Performance can vary substantially by product and category. Compare each approach against a sensible baseline and review errors before operational use.
+- No claims are made about realized cost savings, stockout reduction, or production deployment.
 
-   **macOS/Linux**
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
+## Tech stack
 
-3. Install dependencies:
+**Python · Pandas · NumPy · Matplotlib · scikit-learn · XGBoost · CatBoost · Jupyter**
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Resume-ready description
 
-4. Place your authorized `historical_data.csv` file in the repository root.
-5. Start Jupyter:
+**FMCG Demand Forecasting & Inventory Replenishment** — Python, Pandas, scikit-learn, XGBoost, CatBoost
 
-   ```bash
-   jupyter lab
-   ```
+- Built a product-level demand forecasting workflow using historical sales, lagged demand, rolling statistics, price, promotion, and calendar features to estimate next-seven-day sales.
+- Implemented chronological evaluation and category-aware model routing with XGBoost, CatBoost, and fallback baselines; assessed performance using MAE, RMSE, and R².
+- Translated forecasts into preliminary reorder suggestions using a safety-stock estimate, while documenting data limitations and avoiding unsupported claims of business impact.
 
-6. Open `notebooks/demand_forecasting.ipynb` and run the cells from top to bottom.
-
-The notebook saves its preliminary output as `recommended_reorder_quantity.csv` in the working directory. Generated CSV files and raw data are excluded by `.gitignore`.
-
-## Preliminary Reorder Logic and Limitations
-
-The notebook explores a simple estimate based on predicted 7-day demand plus safety stock, rounded up and clipped at zero. This should be treated as a starting point only.
-
-The current approach does not fully account for:
-
-- Current on-hand stock or inventory already on order
-- Supplier lead times and lead-time demand
-- A statistically defined service level and safety-stock policy
-- Supplier pack sizes, minimum order quantities, or shelf-life constraints
-- Stockouts that may cause recorded sales to understate true demand
-
-Category-level model performance is mixed. No business savings, stockout reduction, or operational impact is claimed without measured evidence.
-
-## Tech Stack
-
-- Python, Jupyter Notebook
-- Pandas, NumPy
-- Matplotlib
-- scikit-learn
-- XGBoost, CatBoost
-
-## Potential Next Steps
-
-- Add time-aware backtesting and compare forecasts against seasonal-naive baselines.
-- Report metrics by product and category.
-- Tune models using a strictly time-based validation strategy.
-- Incorporate inventory position, lead time, and service-level assumptions into replenishment logic.
-- Add reproducible configuration and a concise evaluation report.
+*Use the resume bullets only if you can explain the implementation and have permission to describe the internship work publicly.*
